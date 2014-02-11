@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="span8" style="margin-left:10% ;margin-top:10%">
+@{
+    bool flag=false;
+    foreach (var u in Model.ReqData)
+    {
+        foreach (var v in Model.UserData)
+        {
+            if (u.RU_ID == v.Id && u.Status=="pending")
+            {
+                <p>@v.Fname @v.Lname Sent you friend Request @Html.ActionLink("Accept", "accept", "Requests", new { id = u.RU_ID }, null) @Html.ActionLink("Reject", "reject", "Requests", new { id = (u.RU_ID) }, null) </p>
+                flag = true;
+            }
+
+        }
+
+    }
+    if(flag==false)
+    {
+        <p > You Have No Requests</p>
+    }
+}
+</div>

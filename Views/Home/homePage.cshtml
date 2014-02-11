@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "SocialNet";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model pro.User
+ @Scripts.Render("~/bundles/jquery")
+<script type="text/javascript" >
+    $(document).ready(function () {
+        posts();
+    });
+    function posts() {
+
+        $('#result').empty();
+        $.getJSON("/Home/posts", function (data) {
+            //alert(data);
+            $.each(data, function (i, item) {
+                //alert(item.Picurl);           
+                $('#result').prepend($('<img src="' + item.Picurl + '" ></img>'));
+                $('#result').prepend($('<p>' + item.Text + '</p>'));
+            });
+        });
+    }
+    //function save(oForm) {
+    //    //alert("dsfa");
+    //    var imgpath = document.getElementById("pst").value;
+    //    if (imgpath != "") {
+    //        var arr1 = new Array;
+    //        arr1 = imgpath.split("\\");
+    //        var len = arr1.length;
+    //        var img1 = arr1[len - 1];
+    //        var filext = img1.substring(img1.lastIndexOf(".") + 1);
+    //        // Checking Extension
+    //        if (filext == "bmp" || filext == "gif" || filext == "png" || filext == "jpg" || filext == "jpeg")
+    //        {
+    //            alert("Successfully Uploaded...");
+    //        }
+    //        else
+    //        {
+    //            alert("Upload Photo with Extension ' bmp , gif, png , jpg , jpeg '");
+    //            document.form.word.focus();
+    //        }
+    //    }
+    //}
+</script> 
+        <div class="span3" style="margin-top:80px; margin-left:50px">
+            <div class="sidebar-nav-fixed" style="position:fixed">
+                <div style="width:150px;height:250px">
+                    <img src="@ViewBag.prof" />
+                </div>
+                <ul>
+                    
+                    <li class="nav-header">@ViewBag.us.Fname @ViewBag.us.Lname</li>
+                
+                    <li><a href="/Home/home12">Home</a></li> 
+                    <li><a href="/Profile1/prof">Profile</a></li>
+                    <li><a href="/Messages/messages">Messages</a></li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="span6" style="width:800px">
+            <div>
+                <table border="1">
+                    <tr >
+                        <td style="min-height:1000px;width:800px">
+                            <h1 style="margin-top:10%;margin-left:15px">Posts</h1>
+                            <div class="well">
+                             <form action="/Home/save" method="post" enctype="multipart/form-data" style="margin-left:2%">
+                                <textarea id="txt" name="txt" rows="3" style="width:90%;margin-left:3% ;overflow: auto" placeholder="Share Something With Friends"></textarea>
+                                <input id="pst" type="file" style="margin-left:3%" class="btn filestyle" data-buttonText="Find file" name="image" /> 
+                                <input  type="submit" class="btn btn-success" value="Update Status" />
+                            </form>
+                        </div>
+                        <div id="result"></div>
+
+                        
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="span3" style="margin-top:80px">
+            <div style="position:fixed">       
+                   @* <a href="#">Friends List</a>*@
+            </div>
+        </div>
+        

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="span8" style="margin-left:10% ;margin-top:10%">
+<table class="table table-striped">
+<tr style="font-size:25px"><th>Names</th><th>Images</th><th>Status</th></tr>
+@{
+    bool flag = false;
+    string str="status";
+    foreach (var u in Model.UserData)
+    {
+        flag = false;
+        foreach (var v in Model.ReqData)
+        {
+            if (int.Parse(Session["Id"].ToString()) == v.RU_ID && v.U_Id == u.Id)  //
+            {
+                flag = true;
+                str = v.Status;
+            }
+            else if (int.Parse(Session["Id"].ToString()) == v.U_Id && v.RU_ID == u.Id)  //
+            {
+                flag = true;
+                str = v.Status;
+            }
+        }
+        if (flag == true)
+        {
+            if (str == "Accepted")
+            {
+                str = "Friends";}
+            else if (str == "pending"){
+                str = "Pending Request";}
+            else
+            {
+                str = "Rejected Request";
+            }
+            <tr><td>@u.Fname @u.Lname</td><td><img src="~/Images/@(u.Id)dp/@(u.dp)" style="width:70px;height:70px"></td>
+            <td>@str</td></tr>
+        }
+        else
+        {
+            <tr><td>@u.Fname @u.Lname</td><td><img src="~/Images/@(u.Id)dp/@(u.dp)" style="width:70px;height:70px"></td>
+            <td>@Html.ActionLink("Add Friend", "add", "Search", new { id = (u.Id) }, null) </td></tr>
+        }
+
+    }
+}
+</table>
+</div>

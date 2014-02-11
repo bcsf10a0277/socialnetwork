@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Friends";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="span8" style="margin-left:10% ;margin-top:10%">
+@{
+    bool flag=false;
+    foreach (var v in Model)
+    {        
+        <p> @v.Fname @v.Lname  is your friend <img src="~/Images/@(v.Id)dp/@(v.dp)" style="width:70px;height:70px"></p>
+        flag = true;
+    }
+    if(flag==false)
+    {
+        <p > You Have No Friends</p>
+    }
+}
+</div>

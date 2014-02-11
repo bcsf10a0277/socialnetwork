@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+}
+ @Scripts.Render("~/bundles/jquery")
+<script type="text/javascript" >
+    $(document).ready(function () {
+        about();
+    });
+    function about() {
+
+        $('#result').empty();
+        $.getJSON("/Profile1/about", function (data) {
+           // alert("hi");
+            if (data != false) {
+                var v = data.DOB;
+                var p = v.substring(6, 19);
+                var j = parseInt(p);
+                var myDate = new Date(j).toString();
+                myDate = myDate.substring(0, 15);
+
+                    $('#result').append($('<p >Name : ' + data.Fname +" "+ data.Lname+   '</p>'));
+                    $('#result').append($('<p >User Name : ' + data.UserName + '</p>'));
+                    $('#result').append($('<p >Email : ' + data.Email + '</p>'));
+                    $('#result').append($('<p >Date Of Birth : ' + myDate + '</p>'));
+                    $('#result').append($('<p >Gender : ' + data.Gender + '</p>'));
+
+                }
+            });
+    }
+    function photos() {
+
+        $('#result').empty();
+        $.getJSON("/Profile1/photos", function (data) {
+            $.each(data, function (i, item) {
+               // alert(item);
+                $('#result').append($('<img src="'+item+'" ></img>'));
+            });
+        });
+    }
+</script>
+<div class="span9" style="width:80%">
+            <div style="margin-top:4%;margin-left:3%;background-size: cover">
+                <div  class="imgbdr" style="margin-top:7%;margin-left:4%;width:820px;height:250px;background-size:cover;background-image:url('@ViewBag.cvr');background-position:center"></div>
+                <div class="imgbd" style="width:150px;height:150px;margin-left:6%;margin-top:-2%;;background-size:cover;background-image:url('@ViewBag.prof');background-position:center"></div>
+            </div>
+            <div class="navbar navbar-inverse" style="margin-left:23.5%;margin-top:-12%;width:58.5%">
+	        <div class="navbar-inner" >
+                <ul class="nav">
+                    <li><a href="javascript:about()">About</a></li><br />
+                    <li><a href="javascript:photos()">Photos</a></li><br />
+                    
+                </ul>
+                <form action="/Profile1/save" method="post" enctype="multipart/form-data" style="margin-left:20%">
+                    <input type="file" class="btn filestyle" data-buttonText="Find file" name="image" /> 
+                    <input  type="submit" class="btn btn-success" style="float:right"  value="Change Cover" />
+                </form>
+                <form action="/Profile1/savedp" method="post" enctype="multipart/form-data" style="margin-left:20%">
+                    <input type="file" class="btn" name="image"/>
+                    <input  type="submit" class="btn btn-success" style="float:right" value="Change Profile pic" />
+                </form> 
+            </div>
+            
+        </div>
+        <div id="result" class="well" style="width:73%;margin-left:6%"></div>
+        </div>
+
+        <div class="span3 pull-right" style="margin-top:-300px ;width:20%">
+            <div style="position:fixed">       
+                    @*<a href="#">Online Friends List</a>*@
+            </div>
+            </div>
+<style>
+.imgbdr {
+   border:1px solid #021a40;
+   border-radius:5px;
+}
+.imgbd { 
+   border:4px solid #f6ecec;
+   border-radius:20px;
+}
+</style>

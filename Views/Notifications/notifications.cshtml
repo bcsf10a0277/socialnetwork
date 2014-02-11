@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "Notifications";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="span8" style="margin-left:10% ;margin-top:10%">
+@{
+    bool flag = false;
+    foreach (var v in Model)
+    {
+            <p> @v.status</p>
+            flag = true;
+    }
+    if(flag==false)
+    {
+        <p > You Have No Notifications</p>
+    }
+}
+</div>

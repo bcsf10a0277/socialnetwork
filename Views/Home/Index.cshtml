@@ -1,0 +1,119 @@
+﻿@model pro.Models.User
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="~/Images/S1.JPG">
+    <link href="~/Content/bootstrap2.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap2.js"></script>
+    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/popover.js"></script>
+    <script src="~/Scripts/tooltip.js"></script>
+    <link href="~/Content/templatemo_style.css" rel="stylesheet" />
+    <link href="~/Content/coda-slider.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Welcome To Mini Social</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+<script type="text/javascript" >
+function checkEmail(theForm) {
+    if (theForm.Email.value != theForm.Eml.value)
+    {
+        alert('Emails don\'t match!');
+        return false;
+    } else {
+        return true;
+    }
+}
+
+        $(document).ready(function () {
+
+            $('#result').hide();
+            
+            $('#UserName').change(function () {
+               
+                var UserName = $('#UserName').val();
+
+                //alert('User Name ='+ userName);
+                $('#result').show();
+                $.getJSON("/home/CheckUserName?UserName=" + UserName, function (data)
+                {
+                    //$('#checking').hide();
+                    if (data) {
+                        $('#result').text("User already exists");
+                        
+                    }
+                    else {
+                        $('#result').text("User Name is available");
+                    }
+                });
+
+            });
+
+        });
+</script>
+<div class="navbar navbar-custom navbar-fixed-top">
+	        <div class="navbar-inner" >
+	 	        <a class="brand " href="#" style="color:#cb1111 ; font-family:Candara ;margin-left:40px ; margin-top:20px;margin-bottom:20px; font-size: 40px"> SocialNet </a>
+                
+                    <!--<form method="post" action="/Home/login">
+                        <input id="d1" class="btn btn-info pull-right" type="submit" value="Login" style="margin-right:70px ; margin-top:25px">   
+                        <input name="Password" style="margin-right:10px ; margin-top:25px" type="password" id="cell1" class="cell pull-right" placeholder="Password" required/>
+                        <input name="UserName" style="margin-right:10px ; margin-top:25px" type="text" id="cell2" class="cell pull-right" placeholder="User Name or E-mail" required/>
+                     </form>-->
+                
+                @using (Html.BeginForm("login", "Home", FormMethod.Post))
+                {
+                    <input id="d1" class="btn btn-info pull-right" tabindex="3" type="submit" value="Login" style="margin-right:70px ; margin-top:25px">   
+                    //@Html.TextBox("login", null, new { @id="d1", @class="btn btn-info pull-right" , @type="submit", style="margin-right:70px ; margin-top:25px ; width:40px", @value ="azxxxaz"});
+                    @Html.TextBox("Password", null, new {@name="Password", @tabindex="2",style="margin-right:10px ; margin-top:25px", @type="password", id="cell1", @class="cell pull-right", placeholder="Password",  required="password" });
+                    @Html.TextBox("UserName", null, new { @name="UserName",@tabindex="1", style="margin-right:10px ; margin-top:25px", @type="text", id="cell2", @class="cell pull-right", placeholder="User Name or E-mail", required="UserName" });
+                    @Html.LabelFor(x => x.Fname, "Login", new {  style="margin-right:10px ; margin-top:25px", @class="cell pull-right" })
+                }
+                
+            </div>
+            
+        </div>
+       <div  class="span6" style="margin-top:150px;margin-left:90px">
+        <div class="sidebar-nav-fixed" >
+            <label style="margin-top:120px;font-size:30px;font-family:Nyala;text-align:center">Connect</label>
+            <label style="margin-top:20px;font-size:30px;font-family:Nyala;text-align:center">With</label>
+            <label style="margin-top:20px;font-size:30px;font-family:Nyala;text-align:center">Friends</label>
+            </div>
+            
+        </div>
+         <div class="span6" style="margin-top:120px ;margin-left:110px">
+             <div>
+             <label style="font-size:30px;margin-left:10px;font-family:Nyala">Sign Up</label>
+             <label style="font-size:15px;margin-left:10px;margin-top:10px">It's Free</label>
+         <form method="post" action="/Home/signup" onsubmit="return checkEmail(this)" >
+             <input name="Fname" style="margin-left:10px ; margin-top:25px" type="text" pattern="[' 'a-zA-Z]+" title="Plz enter only Alphabets" placeholder="First Name" required/>
+             <input name="Lname" style="margin-left:6px ; margin-top:25px" type="text" pattern="[' 'a-zA-Z]+" title="Plz enter only Alphabets" placeholder="Last Name" required/>
+             <input name="Email" style="margin-left:10px ; margin-top:5px ;width:440px" type="email" placeholder="me@example.com" required/>
+             <input name="Eml" style="margin-left:10px ; margin-top:5px;width:440px" type="email" placeholder="Re-enter Email" required/>
+             <input name="UserName" id="UserName" style="margin-left:10px ;width:440px ;margin-top:5px" type="text" pattern="[a-zA-Z0-9]+" title="Plz enter only Alphabets" placeholder="User Name" required /><div id="result"></div>
+             <input name="Password"  style="margin-left:10px ; margin-top:5px;width:440px" type="password" placeholder="New Password" required/>
+             <label style="font-size:15px;margin-left:10px;margin-top:5px">Birthday
+                 <input name="DOB" type="Date" style="margin-left:10px;margin-top:7px" id="DOB" required /></label>
+                <div class="controls-row" >
+                    <label style="font-size:15px;margin-left:10px;margin-top:10px" class="control-label">Gender</label>
+                    <label style="font-size:13px;margin-left:10px" class="radio inline">
+                        <input type="radio" name="Gender" value="Male" required />
+                        Male
+                    </label>
+                    <label style="font-size:13px;margin-left:10px" class="radio inline">
+                        <input type="radio" name="Gender" value="Female" required/>
+                        Female
+                     </label>
+                </div>
+             <input class="btn btn-success" type="submit" value="Sign Up" style="margin-left:10px ;width:200px; margin-top:25px;font-family:sans-serif;font-size:20px">   
+        </form>
+             </div>
+
+         </div>
+</body>
+</html>
+     
+

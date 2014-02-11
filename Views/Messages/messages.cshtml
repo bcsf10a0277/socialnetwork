@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ @Scripts.Render("~/bundles/jquery")
+     <script type="text/javascript">
+         $(document).ready(function () {
+             getprev();
+             setInterval("get()",2000); 
+         });
+         var cnv_id = 0;
+         function get() {
+             $.getJSON("/Messages/getNew?id="+cnv_id, function (data) {
+                     $.each(data, function (i, item) {
+                         var v = item.Time;
+                         var p = v.substring(6,19);
+                         var j=parseInt(p);//time of message
+                         var myDate = new Date(j).toString();
+                         myDate = myDate.substring(0,25);
+                         var x = new Date();
+                         var c = x.getTime();
+                         x=c.toString();
+                         var i=parseInt(x);//current
+                         if(i<=j+2050)
+                         {
+                             $("#cnv").append($('<p class="quote">'+ item.Text + '<u>('+ myDate+')</u></p>'));
+                             var textarea = document.getElementById('cnv');
+                             textarea.scrollTop = textarea.scrollHeight;
+
+                         }
+                     });
+                }); 
+         }
+         function send() {
+             
+           //  alert(cnv_id);
+             if($("#msg").val()!="")
+             {
+                 var q = $("#msg").val();
+                 //alert(cnv_id);
+                 $.getJSON("/Messages/sendmsg",{"msg":q,"id":cnv_id}, function (data) {
+                 
+                 });
+             
+                 var x = new Date();
+                 var c = x.getTime();
+                 x=c.toString();
+                 var i=parseInt(x);
+                 var myDate = new Date(i).toString();
+                 myDate = myDate.substring(0,25);
+                 $("#cnv").append($('<p class="thought">'+ q +'<u>('+ myDate+')</u></p>'));
+                 var textarea = document.getElementById('cnv');
+                 textarea.scrollTop = textarea.scrollHeight;
+             }
+             else
+             {
+                 alert("Please Write Some Text");
+             }
+             $("#msg").val('').empty();
+             
+             
+         }
+         function getprev() {
+                 $.getJSON("/Messages/GetMsg", function (data) {
+                     $.each(data, function (i, item) {
+                         if(data.length==1)
+                         {
+                             cnv_id=parseInt(item.Text);
+                            // alert(cnv_id);
+                         }
+                         else
+                         {
+                             var v = item.Time;
+                             var p = v.substring(6,19);
+                             var j=parseInt(p);//time of message
+                             var myDate = new Date(j).toString();
+                             myDate = myDate.substring(0,25);
+                             if(parseInt(@Session["Id"].ToString())==item.S_Id)
+                             {
+                                 $("#cnv").append($('<p class="thought">'+ item.Text  +'<u>('+ myDate+')</u></p>'));
+                                 cnv_id=item.R_Id;
+                             }
+                             else
+                                 $("#cnv").append($('<p class="quote">'+ item.Text  + '<u>('+ myDate+')</u></p>'));
+                         }
+                        // alert(cnv_id);
+                     });
+                     var textarea = document.getElementById('cnv');
+                     textarea.scrollTop = textarea.scrollHeight;
+                 });
+         }
+         function start(usr) {
+             var v=usr.toString();
+            // var p = v.substring(v.length-1,v.length);
+             var i=parseInt(v);
+             cnv_id=v;
+
+             $.getJSON("/Messages/start?id="+i, function (data) {
+                 $("#cnv").empty();
+                 $("#msg").val('').empty();
+                 $.each(data, function (i, item) {
+                     if(data.length==1)
+                     {
+                         $("#h3").text(item.Text);
+                     }
+                     else
+                     {
+                         
+                         var textarea = document.getElementById('cnv');
+                         textarea.scrollTop = textarea.scrollHeight;
+                         if(i!=data.length-1)
+                         {
+                             var v = item.Time;
+                             var p = v.substring(6,19);
+                             var j=parseInt(p);//time of message
+                             var myDate = new Date(j).toString();
+                             myDate = myDate.substring(0,25);                       
+                             if(parseInt(@Session["Id"].ToString())==item.S_Id)
+                                 $("#cnv").append($('<p class="thought">'+ item.Text + '<u>('+ myDate+')</u></p>'));
+                             else
+                                 $("#cnv").append($('<p class="quote">'+ item.Text + '<u>('+ myDate+')</u></p>'));
+                         }
+                         else
+                         {
+                             $("#h3").text(item.Text);
+                         }
+                     }
+                     
+                    
+                 });
+             });          
+         }
+         //function disableClick(){
+         //    document.onclick=function(event){
+         //        if (event.button == 2) {
+         //            alert('Right Click is disabled');
+         //            return false;
+         //        }
+         //    }
+         //} 
+</script>
+    <div class="span5 well" style="margin-top:80px; margin-left:15px;overflow: auto;height:400px">
+            @{
+                foreach (var v in Model.UserData)
+                {
+            
+                       <p style="display:inline"> @v.Fname @v.Lname <img src="~/Images/@(v.Id)dp/@(v.dp)" style="width:70px;height:70px"></p>
+                       <input style="display:inline;float:right" type="button" class="btn btn-success" value="Start Conversation" onclick="start(@v.Id)">
+                        <hr>
+
+                }
+            }
+        </div>
+        <div class="span7" style="margin-top:80px;width:800px">
+            <div>
+                <table border="0">
+                    <tr >
+                        <td style="width:800px">
+                            <h1 style="margin-left:15px">Conversation</h1>
+                            <h3 id="h3" style="margin-top:-40px;margin-left:15px">@Model.us.Fname @Model.us.Lname</h3>                        
+                            <div id="cnv" class="well" style="width:700px;height:300px;margin-left:10px ; margin-top:0px;overflow: auto">
+                            </div>                      
+                            <textarea id="msg" rows="3" cols="10" style="width:600px;margin-left:10px ;overflow: auto"></textarea>
+                            <input type="button" class="btn btn-info" style="width:120px; margin-top:40px;" value="Send" onclick='send()'/>
+                           
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+               
+<style>
+p.thought {
+position:relative; /*see the support section below for more info*/
+width:400px; /*size of the bubble*/
+padding:5px 5px;
+margin:10px 10px 10px 10px;
+float:left;
+/**give the bubble's background a gradient**/
+background:#f7a944; /*fallback colour for non-supporting browsers*/
+background:-webkit-gradient(linear, 0 0, 0 100%, from(#fac868), to(#f3961c));
+background:-moz-linear-gradient(#fac868, #f3961c);
+background:-o-linear-gradient(#fac868, #f3961c);
+background:linear-gradient(#fac868, #f3961c);
+/**give the corners a large curve**/
+-webkit-border-radius:10px;
+-moz-border-radius:10px;
+border-radius:10px;
+/**add a drop shadow to the bubble**/
+-webkit-box-shadow: -3px 4px 8px #989898;
+-moz-box-shadow: -3px 4px 8px #989898;
+box-shadow: -3px 4px 8px #989898;
+/**style the text**/
+color:#575544;
+font-size:1em;
+letter-spacing:.06em;
+}
+div#cnv {
+    word-wrap:break-word;
+}
+p.quote {
+position:relative;
+padding:5px;
+width:400px;
+margin:10px 10px 10px 10px;
+color:#f6edf6;
+float:right;
+/**Give the corners a curve **/
+-webkit-border-radius:10px /10px;
+-moz-border-radius:10px /10px;
+border-radius:10px /10px; /* the second value, preceded by a / defines the vertical radius*/
+/**Add a gradient to the background of the bubble**/
+background:#c49bc4; /*required for browsers that don't support gradients*/
+background:-webkit-gradient(#7e527f, #c49bc4);
+background:-moz-linear-gradient(#7e527f, #c49bc4);
+background:-o-linear-gradient(#7e527f, #c49bc4);
+background:linear-gradient(#7e527f, #c49bc4);
+
+
+-webkit-box-shadow: -3px 4px 8px #989898;
+-moz-box-shadow: -3px 4px 8px #989898;
+box-shadow: -3px 4px 8px #989898;
+
+color:#e2efed;
+font-size:1em;
+letter-spacing:.06em;
+}
+</style>           

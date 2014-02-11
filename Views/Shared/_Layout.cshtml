@@ -1,0 +1,45 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="shortcut icon" href="~/Images/S1.JPG">
+    <link href="~/Content/bootstrap2.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap2.js"></script>
+    <script src="~/Scripts/popover.js"></script>
+    <script src="~/Scripts/tooltip.js"></script>
+    <link href="~/Content/templatemo_style.css" rel="stylesheet" />
+    <link href="~/Content/coda-slider.css" rel="stylesheet" />
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+	        <div class="navbar-inner tabbable" >
+	 	        <a class="brand " href="/Home/home12" style="color:#cb1111 ;font-family:Candara ; margin-top:5px;margin-left:1px;margin-bottom:5px; font-size: 30px"> SocialNet </a>
+              
+                <ul style="margin-left:5px ;margin-top:5px" class="nav nav-tabs">
+                    <li><a href="/Home/home12">Home</a></li> 
+                    <li><a href="/Profile1/prof">Profile</a></li>
+                    <li><a href="/Friends/friends">Friends</a></li>
+                    <li><a href="/Settings/settings">Settings</a></li>
+                    <li><a href="/Requests/requests">Requests</a></li> 
+                    <li><a href="/Messages/messages">Messages<span class="badge"></span></a></li>
+                    <li><a href="/Notifications/notifications">Notification</a></li>
+                    <li><a href="/Search/Index">Search</a></li>
+                    <li><form method="post" action="/Home/logout"><input type="submit" style="margin-top:10px;margin-left:400px" class="btn btn-info"  value="logout" /></form></li>   
+                    </ul>
+                
+
+            </div>
+            
+        </div>
+
+    @RenderBody()
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

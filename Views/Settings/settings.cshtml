@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript" >
+
+
+            //$('#checking').hide();
+            
+    function upd() {
+               
+        var pas = $('#Password').val();
+        var fn = $('#Fname').val();
+        var ln = $('#Lname').val();
+        $.getJSON("/Settings/Update", { "Password": pas, "Fname" : fn,"Lname":ln}, function (data)
+                {
+                    //$('#checking').hide();
+                    if (data) {
+                        $('#result').text("Updated");
+                        
+                    }
+                    else {
+                        $('#result').text("Not Updated");
+                    }
+                });
+
+            }
+</script>
+<h2>settings</h2>
+<div id="dv" style="width:25%; margin-left:36%; margin-top:10%" class="well">
+        
+            <h3 >Update</h3>
+            <input name="Password" id="Password" style="margin-left:10px ; margin-top:15px" type="password" placeholder="New Password"/>
+            <input name="Fname" id="Fname" style="margin-left:10px ; margin-top:5px" type="text" placeholder="New First Name"/>
+            <input name="Lname" id="Lname" style="margin-left:10px ; margin-top:5px" type="text" placeholder="New Last name"/>
+            <label style="margin-left:10px">If you don't want to update any field then skip it</label>
+            <div id="result"></div>
+            <input onclick="upd()" class="btn btn-info" type="submit" value="Update" style="margin-left:20px ; margin-top:25px">   
+</div>
